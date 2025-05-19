@@ -44,8 +44,7 @@ def main():
                             else:
                                 notfixedobj[id] = {packagename: resultobj}
                             notfixedobj[id]["cve"] = cve
-
-                            print(f'{osv["id"]} - {osv["summary"]}, {packagename}, NOT Fixed')
+                            #print(f'{osv["id"]} - {osv["summary"]}, {packagename}, NOT Fixed')
                         if fixed == True:
                             if id in fixedobj:
                                 fixedobj[id][packagename] = resultobj
