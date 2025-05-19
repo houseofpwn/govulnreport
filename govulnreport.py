@@ -58,6 +58,12 @@ def main():
             package = affected[0]["package"]
             #print(f'{osv["id"]} - {osv["summary"]}, {package["name"]}')
     print("Loaded.")
+    with open("/docs/fixed.json", 'w+') as fixedfile:
+        json.dump(fixedobj, fixedfile, indent=4)
+        fixedfile.close()
+    with open("/docs/notfixed.json", 'w+') as notfixedfile:
+        json.dump(notfixedobj, notfixedfile, indent=4)
+        notfixedfile.close()
 
 
 
