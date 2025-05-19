@@ -3,7 +3,6 @@ import sys
 
 filename = sys.argv[1]
 def main():
-    print(f'{filename}')
     with open(filename, "r") as vulnfile:
         vulndata = vulnfile.read()
     newvulndata = vulndata.replace('\n',' ')
