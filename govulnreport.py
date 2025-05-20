@@ -4,6 +4,7 @@ from colorama import Fore, Back, Style
 
 filename = sys.argv[1]
 def main():
+    workingfolder = sys.argv[2]
     with open(filename, "r") as vulnfile:
         vulndata = vulnfile.read()
     newvulndata = vulndata.replace('\n',' ')
@@ -57,10 +58,10 @@ def main():
             package = affected[0]["package"]
             #print(f'{osv["id"]} - {osv["summary"]}, {package["name"]}')
     print(Fore.GREEN + "Generated fixed / not-fixed tables.")
-    with open("/docs/fixed.json", 'w+') as fixedfile:
+    with open(f'{workingfolder}/fixed.json', 'w+') as fixedfile:
         json.dump(fixedobj, fixedfile, indent=4)
         fixedfile.close()
-    with open("/docs/notfixed.json", 'w+') as notfixedfile:
+    with open(f'{workingfolder}/notfixed.json', 'w+') as notfixedfile:
         json.dump(notfixedobj, notfixedfile, indent=4)
         notfixedfile.close()
 
