@@ -1,5 +1,6 @@
 import json
 import sys
+from colorama import Fore, Back, Style
 
 filename = sys.argv[1]
 def main():
@@ -55,7 +56,7 @@ def main():
 
             package = affected[0]["package"]
             #print(f'{osv["id"]} - {osv["summary"]}, {package["name"]}')
-    print("Loaded.")
+    print(Fore.GREEN + "Generated fixed / not-fixed tables.")
     with open("/docs/fixed.json", 'w+') as fixedfile:
         json.dump(fixedobj, fixedfile, indent=4)
         fixedfile.close()
