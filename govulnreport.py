@@ -1,9 +1,11 @@
 import json
 import sys
-from colorama import Fore, Back, Style
+from colorama import Fore
 
-filename = sys.argv[1]
+# This script will take the output from govulncheck json file, parses it,
+# and outputs fixed.json and notfixed.json for processing by other scripts.
 def main():
+    filename = sys.argv[1]
     workingfolder = sys.argv[2]
     with open(filename, "r") as vulnfile:
         vulndata = vulnfile.read()
@@ -11,9 +13,9 @@ def main():
     vulnjson = json.loads(newvulndata)
     notfixedobj = {}
     fixedobj = {}
-    for object in vulnjson:
-        if "osv" in object:
-            osv = object["osv"]
+    for theobject in vulnjson:
+        if "osv" in theobject:
+            osv = theobject["osv"]
             affected = osv["affected"]
             id = osv["id"]
             cve = None
@@ -29,34 +31,25 @@ def main():
                         ranges = obj["ranges"]
                         events = ranges[0]["events"]
                         fixed = False
-                        introduced = -1
                         resultobj = {}
                         for event in events:
                             if "introduced" in event:
-                                introduced = event["introduced"]
                                 resultobj["introduced"] = event["introduced"]
                             if "fixed" in event:
                                 resultobj["fixed"] = event["fixed"]
                                 fixed = True
-                                #print(f'{osv["id"]} - {osv["summary"]}, {obj["package"]["name"]}, Fixed in {event["fixed"]}')
-
                         if fixed == False:
                             if id in notfixedobj:
                                 notfixedobj[id][packagename] = resultobj
                             else:
                                 notfixedobj[id] = {packagename: resultobj}
                             notfixedobj[id]["cve"] = cve
-                            #print(f'{osv["id"]} - {osv["summary"]}, {packagename}, NOT Fixed')
                         if fixed == True:
                             if id in fixedobj:
                                 fixedobj[id][packagename] = resultobj
                             else:
                                 fixedobj[id] = {packagename: resultobj}
                             fixedobj[id]["cve"] = cve
-
-
-            package = affected[0]["package"]
-            #print(f'{osv["id"]} - {osv["summary"]}, {package["name"]}')
     print(Fore.GREEN + "Generated fixed / not-fixed tables.")
     with open(f'{workingfolder}/fixed.json', 'w+') as fixedfile:
         json.dump(fixedobj, fixedfile, indent=4)
@@ -64,8 +57,6 @@ def main():
     with open(f'{workingfolder}/notfixed.json', 'w+') as notfixedfile:
         json.dump(notfixedobj, notfixedfile, indent=4)
         notfixedfile.close()
-
-
 
 if __name__ == "__main__":
     main()
